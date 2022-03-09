@@ -17,7 +17,7 @@ RUN pecl install xdebug \
 
 COPY --chown=www-data:www-data . /var/www
 COPY --from=composer /app/vendor /var/www/vendor
-COPY scripts/test.sh ./test.sh
+COPY docker/scripts/test.sh ./test.sh
 RUN sed -i -e 's/\r$//' test.sh
 RUN chmod +x test.sh
 
