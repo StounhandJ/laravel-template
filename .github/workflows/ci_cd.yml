@@ -93,7 +93,7 @@ jobs:
           password: ${{ secrets.DEPLOY_SERVER_PASSWORD }}
           script_stop: true
           script: |
-            cd ~/kindergarten-crm
+            cd ~/template-example
             ./restart.sh
       - name: Final
         run: echo "Succesfully deployed"

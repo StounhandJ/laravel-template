@@ -67,7 +67,7 @@ services:
             max-size: "200k"
             max-file: "2"
     depends_on:
-      - goservice
+      - site
 
   certbot:
       image: certbot/dns-cloudflare
