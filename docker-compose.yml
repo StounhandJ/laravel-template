@@ -51,7 +51,7 @@ services:
     command: ["/bin/sh", "-c", "set -eu && envsubst '$$DOMAIN, $$BACK_END' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;' && while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g 'daemon off;'"]
     environment:
       - DOMAIN=${DOMAIN}
-      - BACK_END=goservice
+      - BACK_END=site
     ports:
       - "80:80"
       - "443:443"
