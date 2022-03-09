@@ -1,0 +1,44 @@
+version: "3.7"
+
+volumes:
+  db_pg_test:
+    name: db_pg_test
+
+services:
+  site_test:
+    build:
+        context: .
+        dockerfile: Dockerfile.test
+    restart: "no"
+    environment:
+      - APP_URL=http://localhost
+      - APP_DEBUG=False
+      - DB_HOST=pg_db_test
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_DATABASE=test
+      - PRODUCT=True
+    volumes:
+      - ./public:/var/www/public
+      - ./app:/var/www/app
+      - ./config:/var/www/config
+      - ./routes:/var/www/routes
+      - ./database:/var/www/database
+      - ./storage:/var/www/storage
+      - ./resources:/var/www/resources
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./tests:/var/www/tests
+    depends_on:
+      - pg_db_test
+    container_name: site_kindergarten_test
+
+  pg_db_test:
+    image: postgres:13.4
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=test
+    volumes:
+      - db_pg_test:/var/lib/postgresql/data/
+    container_name: pg_db_kindergarten_test

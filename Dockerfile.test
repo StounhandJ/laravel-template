@@ -1,0 +1,26 @@
+FROM composer as composer
+COPY composer.* /app/
+RUN composer install --ignore-platform-reqs --no-scripts --optimize-autoloader
+
+FROM php:8.1-cli
+
+COPY composer.lock composer.json /var/www/
+
+WORKDIR /var/www
+
+RUN apt-get update
+RUN apt-get install -y libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+COPY --chown=www-data:www-data . /var/www
+COPY --from=composer /app/vendor /var/www/vendor
+COPY scripts/test.sh ./test.sh
+RUN sed -i -e 's/\r$//' test.sh
+RUN chmod +x test.sh
+
+RUN php artisan key:generate
+
+CMD ["./test.sh"]

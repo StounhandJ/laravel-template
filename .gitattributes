@@ -1,0 +1,6 @@
+* text=auto
+
+*.blade.php diff=html
+
+/.github export-ignore
+CHANGELOG.md export-ignore

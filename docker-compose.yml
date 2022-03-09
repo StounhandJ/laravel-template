@@ -1,0 +1,84 @@
+version: "3.7"
+
+volumes:
+    db_pg:
+        name: db_pg
+
+services:
+  site:
+    build: .
+    restart: always
+    environment:
+      - APP_URL=https://${DOMAIN}
+      - APP_DEBUG=False
+      - DB_HOST=pg_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=kindegraten_root_pg
+      - DB_DATABASE=kindegraten
+      - PRODUCT=True
+    volumes:
+      - ./storage/app:/var/www/storage/app
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      - pg_db
+    logging:
+        driver: "json-file"
+        options:
+            max-size: "200k"
+            max-file: "2"
+    container_name: site_kindergarten
+
+  pg_db:
+    image: postgres:13.4
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=kindegraten_root_pg
+      - POSTGRES_DB=kindegraten
+    volumes:
+      - db_pg:/var/lib/postgresql/data/
+    logging:
+        driver: "json-file"
+        options:
+            max-size: "200k"
+            max-file: "2"
+    container_name: pg_db_kindergarten
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    command: ["/bin/sh", "-c", "set -eu && envsubst '$$DOMAIN, $$BACK_END' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;' && while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g 'daemon off;'"]
+    environment:
+      - DOMAIN=${DOMAIN}
+      - BACK_END=goservice
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./public:/var/www/public
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf.template
+      - ./docker/certbot/conf:/etc/letsencrypt
+      - ./docker/nginx/options-ssl-nginx.conf:/etc/nginx/conf.d/options-ssl-nginx.conf
+      - ./docker/nginx/ssl-dhparams.pem:/etc/nginx/conf.d/ssl-dhparams.pem
+    logging:
+        driver: "json-file"
+        options:
+            max-size: "200k"
+            max-file: "2"
+    depends_on:
+      - goservice
+
+  certbot:
+      image: certbot/dns-cloudflare
+      restart: unless-stopped
+      entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --dns-cloudflare-credentials /cloudflare.ini; sleep 3d & wait $${!}; done;'"
+      logging:
+          driver: "json-file"
+          options:
+              max-size: "200k"
+              max-file: "2"
+      volumes:
+          - ./docker/certbot/cloudflare.ini:/opt/cerbot/cloudflare.ini
+          - ./docker/certbot/conf:/etc/letsencrypt
+          - ./docker/certbot/www:/var/www/certbot
