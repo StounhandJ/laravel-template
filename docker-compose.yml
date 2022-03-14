@@ -26,7 +26,7 @@ services:
         options:
             max-size: "200k"
             max-file: "2"
-    container_name: site_kindergarten
+    container_name: site
 
   pg_db:
     image: postgres:13.4
@@ -42,7 +42,7 @@ services:
         options:
             max-size: "200k"
             max-file: "2"
-    container_name: pg_db_kindergarten
+    container_name: pg_db
 
   nginx:
     image: nginx:alpine

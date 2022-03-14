@@ -30,7 +30,7 @@ services:
       - ./tests:/var/www/tests
     depends_on:
       - pg_db_test
-    container_name: site_kindergarten_test
+    container_name: site_test
 
   pg_db_test:
     image: postgres:13.4
@@ -41,4 +41,4 @@ services:
       - POSTGRES_DB=test
     volumes:
       - db_pg_test:/var/lib/postgresql/data/
-    container_name: pg_db_kindergarten_test
+    container_name: pg_db_test

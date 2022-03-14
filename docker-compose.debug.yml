@@ -24,7 +24,7 @@ services:
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     depends_on:
       - pg_db
-    container_name: site_kindergarten
+    container_name: site
 
   pg_db:
     image: postgres:13.4
@@ -35,14 +35,14 @@ services:
       - POSTGRES_DB=veltrix
     volumes:
       - ./db_pg:/var/lib/postgresql/data/
-    container_name: pg_db_kindergarten
+    container_name: pg_db
 
   adminer:
     image: adminer
     restart: always
     ports:
       - "8001:8080"
-    container_name: adminer_kindergarten
+    container_name: adminer
 
   nginx:
     image: nginx:alpine
