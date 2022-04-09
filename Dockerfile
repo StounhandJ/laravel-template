@@ -32,7 +32,5 @@ COPY docker/scripts/init.sh ./init.sh
 RUN sed -i -e 's/\r$//' init.sh
 RUN chmod +x ./init.sh
 
-RUN php artisan key:generate
-
 EXPOSE 9000
 CMD ["/usr/bin/supervisord"]
