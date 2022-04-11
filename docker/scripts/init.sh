@@ -15,7 +15,7 @@ loadEnv() {
 loadEnv .env
 
 if [[ "$APP_KEY" == '' ]]; then
-    RUN php artisan key:generate
+    php artisan key:generate
 fi
 
 sleep 10
