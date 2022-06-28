@@ -27,7 +27,7 @@ RUN touch /var/www/cron.log
 # ------
 
 # memcached
-#RUN apt-get install -y libmemcached-dev -no-install-recommends
+#RUN apt-get install -y libmemcached-dev --no-install-recommends
 #RUN pecl install memcached \
 #    && docker-php-ext-enable memcached
 # ------
