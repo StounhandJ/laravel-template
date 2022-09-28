@@ -13,8 +13,8 @@ services:
       - APP_DEBUG=False
       - DB_HOST=pg_db
       - DB_USERNAME=root
-      - DB_PASSWORD=kindegraten_root_pg
-      - DB_DATABASE=kindegraten
+      - DB_PASSWORD=root_pg
+      - DB_DATABASE=laravel_db
       - PRODUCT=True
     volumes:
       - ./storage/app:/var/www/storage/app
@@ -33,8 +33,8 @@ services:
     restart: always
     environment:
       - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=kindegraten_root_pg
-      - POSTGRES_DB=kindegraten
+      - POSTGRES_PASSWORD=root_pg
+      - POSTGRES_DB=laravel_db
     volumes:
       - db_pg:/var/lib/postgresql/data/
     logging:
