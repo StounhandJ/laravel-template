@@ -4,9 +4,9 @@ RUN composer install --ignore-platform-reqs --no-scripts --optimize-autoloader
 
 FROM php:8.1-fpm
 
-COPY composer.lock composer.json /var/www/
-
 WORKDIR /var/www
+
+COPY composer.lock composer.json ./
 
 RUN apt-get update --fix-missing
 RUN apt-get install -y zlib1g-dev libpq-dev --no-install-recommends \
@@ -16,7 +16,7 @@ RUN apt-get install -y zlib1g-dev libpq-dev --no-install-recommends \
 # Supervisor
 RUN apt-get install -y supervisor
 COPY docker/scripts/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-RUN touch /var/www/cron.log
+RUN touch cron.log
 # ------
 
 # Zip
@@ -38,8 +38,8 @@ RUN touch /var/www/cron.log
 #    rm -rf /var/lib/apt/lists/*
 # ------
 
-COPY --chown=www-data:www-data . /var/www
-COPY --from=composer /app/vendor /var/www/vendor
+COPY --chown=www-data:www-data . .
+COPY --from=composer /app/vendor vendor
 
 COPY docker/scripts/init.sh ./init.sh
 RUN sed -i -e 's/\r$//' init.sh

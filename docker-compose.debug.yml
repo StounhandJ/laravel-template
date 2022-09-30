@@ -11,8 +11,10 @@ services:
       - DB_HOST=pg_db
       - DB_USERNAME=root
       - DB_PASSWORD=root
-      - DB_DATABASE=laravel_db
+      - DB_DATABASE=template_base
       - PRODUCT=False
+      - MEMCACHED_HOST=memcached_db
+      - MEMCACHED_PORT=11211
     volumes:
       - ./public:/var/www/public
       - ./app:/var/www/app
@@ -32,9 +34,9 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=laravel_db
+      - POSTGRES_DB=template_base
     volumes:
-      - ./db_pg:/var/lib/postgresql/data/
+      - db_pg_template:/var/lib/postgresql/data/
     container_name: pg_db
 
   adminer:
@@ -56,3 +58,12 @@ services:
       - ./docker/nginx/nginx.debug.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - site
+
+  memcached_db:
+    image: memcached:latest
+    restart: always
+    command:
+      - '--memory-limit=100'
+
+volumes:
+  db_pg_template:
