@@ -44,6 +44,8 @@ COPY --from=composer /app/vendor vendor
 COPY docker/scripts/init.sh ./init.sh
 RUN sed -i -e 's/\r$//' init.sh
 RUN chmod +x ./init.sh
+RUN touch storage/logs/laravel.log
+RUN chmod 777 storage/logs/laravel.log
 
 EXPOSE 9000
 CMD ["/usr/bin/supervisord"]
