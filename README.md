@@ -11,8 +11,7 @@
 2.4. Cloudflare Global api key CLOUDFLARE_API_KEY get [here](https://dash.cloudflare.com/profile/api-tokens)  
 2.5. (Additionally) According to the smtp connection standard, configure these variables MAIL_PORT MAIL_HOST MAIL_USERNAME MAIL_PASSWORD MAIL_FROM_ADDRESS  
 2.6. (Additionally) Administrator's email APP_MAIL  
-3. `chmod +x run.sh` Grant rights to execute the script
-4. `./run.sh` Run the project
+3`./run.sh` Run the project
 
 ### Example of SSL/TLS configuration
 ![](documentation/cloudflare.png) 
