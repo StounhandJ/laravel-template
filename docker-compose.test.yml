@@ -17,7 +17,6 @@ services:
       - DB_USERNAME=root
       - DB_PASSWORD=root
       - DB_DATABASE=test
-      - PRODUCT=True
     volumes:
       - ./public:/var/www/public
       - ./app:/var/www/app
@@ -33,7 +32,7 @@ services:
     container_name: site_test
 
   pg_db_test:
-    image: postgres:13.4
+    image: postgres:15-alpine
     restart: always
     environment:
       - POSTGRES_USER=root
